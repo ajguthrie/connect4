@@ -44,11 +44,39 @@ def drop_piece(board, column, symbol):
       return True
   return False
 
+def check_vert(board, symbol):
+  for r in range(3):
+    for c in range(7):
+      if (board[r][c] == symbol and board[r + 1][c] == symbol
+          and board[r + 2][c] == symbol and board[r + 3][c] == symbol):
+        return True
+  return False
+
+def check_horiz(board, symbol):
+  for r in range(6):
+    for c in range(4):
+      if (board[r][c] == symbol and board[r][c + 1] == symbol 
+          and board[r][c + 2] == symbol and board[r][c + 3] == symbol):
+        return True
+  return False
+
+def check_diag(board, symbol):
+  # down and right
+  for r in range(3):
+    for c in range(4):
+      if (board[r][c] == symbol and board[r + 1][c + 1] == symbol and 
+          board[r + 2][c + 2] == symbol and board[r + 3][c + 3] == symbol):
+        return True
+      
+  # up and right
+  for r in range(5, 2, -1):
+    for c in range(4):
+      if (board[r][c] == symbol and board[r - 1][c + 1] == symbol and 
+          board[r - 2][c + 2] == symbol and board[r - 3][c + 3] == symbol):
+        return True
+  return False
+      
 def main():
-  # content_line_display(board_list)
-  # print(column_choice())
-  # first_board = drop_piece(board_list, 1, "X")
-  # second_board = drop_piece(first_board, 1, "O")
   board = [[" "] * 7 for i in range(6)]
   current_player = "X"
 
@@ -59,12 +87,24 @@ def main():
 
     column = column_choice()
     if drop_piece(board, column, current_player):
+      win_conditions = [
+      check_vert(board, current_player), 
+      check_horiz(board, current_player), 
+      check_diag(board, current_player)
+      ]
+
+      if any(win_conditions):
+        content_line_display(board)
+        print(f"🎉 PLAYER {current_player} HAS WON THE GAME! 🎉")
+        done = True
+        break 
+
       if current_player == "X":
         current_player = "O"
       else:
         current_player = "X"
     else: 
       print("Column is full! Please pick another one.")
-    
+
 if __name__ == "__main__":
   main()
