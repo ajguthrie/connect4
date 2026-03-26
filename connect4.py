@@ -36,7 +36,6 @@ def column_choice():
       print("Invalid entry. Please try again.")
 
 def drop_piece(board, column, symbol):
-  # print(board)
   column = column - 1
   for i in range(len(board)-1, -1, -1):
     if board[i][column] == ' ':
